@@ -9,5 +9,5 @@ class RefreshView(TemplateView):
         ret = crawler.gather_data()
         return JsonResponse({"status": "ok",
                              "message": "",
-                             "value": {"new_location": ret[0],
+                             "value": {"new_county": ret[0],
                                        "new_data": ret[1]}})

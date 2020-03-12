@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from django.db import IntegrityError
 
-from api.models import Location, Datum
+from api.models import County, Datum
 
 link = "https://www.lgl.bayern.de/gesundheit/infektionsschutz/infektionskrankheiten_a_z/coronavirus/" \
        "karte_coronavirus/index.htm"
@@ -23,20 +23,17 @@ def gather_data():
 
     loc_counter = data_counter = 0
     for entry in data_list:
-        loc = Location(name=entry[0])
+        county = County(name=entry[0])
         try:
-            loc.save()
+            county.save()
             loc_counter += 1
         except IntegrityError:
-            loc = Location.objects.filter(name=entry[0])[0]
+            county = County.objects.filter(name=entry[0])[0]
 
-        if Datum.objects.filter(location=loc).filter(infected=entry[1]):
+        if Datum.objects.filter(county=county).filter(infected=entry[1]):
             continue
-        datum = Datum(infected=entry[1], location=loc)
-        try:
-            datum.save()
-            data_counter += 1
-        except IntegrityError:
-            pass
+        datum = Datum(infected=entry[1], county=county)
+        datum.save()
+        data_counter += 1
 
     return loc_counter, data_counter
