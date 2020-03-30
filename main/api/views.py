@@ -2,19 +2,10 @@ from django.http import JsonResponse
 from django.views.generic import TemplateView
 
 from api.models import County, Datum
-from main import crawler
 
 
 class RefreshView(TemplateView):
-    def get(self, request, *args, **kwargs):
-        ret = crawler.gather_data()
-        if not isinstance(ret, tuple):
-            return JsonResponse({"status": "failed",
-                                 "message": "Problem occurred while gathering data"}, status=500)
-        return JsonResponse({"status": "ok",
-                             "message": "",
-                             "value": {"new_county": ret[0],
-                                       "new_data": ret[1]}})
+    pass
 
 
 class GetCountiesView(TemplateView):
