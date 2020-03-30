@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import CharField, IntegerField, ForeignKey, DateField
+from django.db.models import CharField, IntegerField, ForeignKey, DateField, FloatField
 
 
 class County(models.Model):
@@ -7,8 +7,11 @@ class County(models.Model):
 
 
 class Datum(models.Model):
-    infected = IntegerField()
-    date = DateField(auto_now=True)
-#    deaths = IntegerField()
-#    recovered = IntegerField()
+    date = DateField()
+    cases = IntegerField(default=0)
+    cases_per_100k = FloatField(default=0)
+    cases_per_population = FloatField(default=0)
+    deaths = IntegerField(default=0)
+    death_rate = FloatField(default=0)
     county = ForeignKey(County, on_delete=models.CASCADE)
+    county_population = IntegerField(default=0)
